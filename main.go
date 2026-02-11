@@ -1,9 +1,19 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"time"
 )
+
+type City struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Temp string `json:"temp"`
+}
 
 func main() {
 	start := time.Now()
@@ -20,5 +30,30 @@ func main() {
 func fetchCityData(cityName string) {
 	sub_start := time.Now()
 
-	fmt.Printf("%s done in %d milliseconds\n", cityName, time.Since(sub_start).Milliseconds())
+	url := fmt.Sprintf("http://localhost:3000/cities?name=%s", cityName)
+	res, err := http.Get(url)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	defer res.Body.Close()
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	var data []City
+	err = json.Unmarshal(resBody, &data)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	fmt.Println("-----------------")
+	fmt.Printf("%s city --> %s degree\t\t", data[0].Name, data[0].Temp)
+	fmt.Printf("%s took %d milliseconds\n", cityName, time.Since(sub_start).Milliseconds())
+	fmt.Print("-----------------\n\n")
 }
