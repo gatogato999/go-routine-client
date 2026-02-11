@@ -18,4 +18,7 @@ func main() {
 }
 
 func fetchCityData(cityName string) {
+	sub_start := time.Now()
+
+	fmt.Printf("%s done in %d milliseconds\n", cityName, time.Since(sub_start).Milliseconds())
 }
