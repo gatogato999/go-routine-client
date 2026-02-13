@@ -1,11 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"time"
 )
 
@@ -30,33 +26,18 @@ func seq() {
 	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
 }
 
-func fetchCityDataSequentialy(cityName string) {
-	sub_start := time.Now()
+func cuncurr() {
+	start := time.Now()
 
-	url := fmt.Sprintf("http://localhost:3000/cities?name=%s", cityName)
-	res, err := http.Get(url)
-	if err != nil {
-		log.Println(err)
-		return
+	cities2check := []string{"city1", "city2"}
+
+	resultChanal := make(chan string)
+	for _, cityName := range cities2check {
+		go FetchCityDataconcurrently(cityName, resultChanal)
 	}
 
-	resBody, err := io.ReadAll(res.Body)
-	defer res.Body.Close()
-
-	if err != nil {
-		log.Println(err)
-		return
+	for range cities2check {
+		fmt.Println(<-resultChanal)
 	}
-
-	var data []City
-	err = json.Unmarshal(resBody, &data)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	fmt.Println("-----------------")
-	fmt.Printf("%s city --> %s degree\t\t", data[0].Name, data[0].Temp)
-	fmt.Printf("%s took %d milliseconds\n", cityName, time.Since(sub_start).Milliseconds())
-	fmt.Print("-----------------\n\n")
+	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
 }
