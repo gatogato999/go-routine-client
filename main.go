@@ -16,18 +16,22 @@ type City struct {
 }
 
 func main() {
+	seq()
+}
+
+func seq() {
 	start := time.Now()
 
-	cities2check := []string{"city1", "city2", "city4"}
+	cities2check := []string{"city1", "city2"}
 
 	for _, cityName := range cities2check {
-		fetchCityData(cityName)
+		fetchCityDataSequentialy(cityName)
 	}
 
 	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
 }
 
-func fetchCityData(cityName string) {
+func fetchCityDataSequentialy(cityName string) {
 	sub_start := time.Now()
 
 	url := fmt.Sprintf("http://localhost:3000/cities?name=%s", cityName)
