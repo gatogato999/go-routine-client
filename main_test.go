@@ -14,15 +14,26 @@ func BenchmarkMain(b *testing.B) {
 
 /*
 
-BenchmarkMain-4              603           1937730 ns/op
+BenchmarkMain-4              603           1,937,730 ns/op
 PASS
 ok      client-concurrent       1.179s
 -------------------------------------------------------------
-BenchmarkMain-4              622           1926602 ns/op
+BenchmarkMain-4              622           1,926,602 ns/op
 PASS
 ok      client-concurrent       1.208s
 ------------------------------------------------------------
-BenchmarkMain-4              775           1577186 ns/op
+BenchmarkMain-4              775           1,577,186 ns/op
 PASS
 ok      client-concurrent       1.232s
+*/
+
+/*
+
+BenchmarkMain-4              224           4,834,421 ns/op
+PASS
+ok      client-concurrent       1.096s
+
+BenchmarkMain-4              277           4,325,746 ns/op
+PASS
+ok      client-concurrent       1.207s
 */
