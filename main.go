@@ -17,18 +17,6 @@ func main() {
 	cuncurr(cntx, time.Millisecond*8)
 }
 
-func seq() {
-	start := time.Now()
-
-	cities2check := []string{"city1", "city2"}
-
-	for _, cityName := range cities2check {
-		fetchCityDataSequentialy(cityName)
-	}
-
-	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
-}
-
 func cuncurr(contxt context.Context, timeout time.Duration) {
 	cancelContext, cancel := context.WithTimeout(contxt, timeout)
 	defer cancel()
@@ -48,7 +36,7 @@ func cuncurr(contxt context.Context, timeout time.Duration) {
 			fmt.Println(res)
 		case <-cancelContext.Done():
 			fmt.Printf("operation canceled : it took more than %v\n", timeout)
-
+			return
 		}
 	}
 	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
