@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
@@ -12,6 +13,8 @@ type City struct {
 }
 
 func main() {
+	cntx := context.Background()
+	cuncurr(cntx, time.Millisecond*8)
 }
 
 func seq() {
@@ -26,7 +29,10 @@ func seq() {
 	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
 }
 
-func cuncurr() {
+func cuncurr(contxt context.Context, timeout time.Duration) {
+	cancelContext, cancel := context.WithTimeout(contxt, timeout)
+	defer cancel()
+
 	start := time.Now()
 
 	cities2check := []string{"city1", "city2"}
@@ -37,7 +43,13 @@ func cuncurr() {
 	}
 
 	for range cities2check {
-		fmt.Println(<-resultChanal)
+		select {
+		case res := <-resultChanal:
+			fmt.Println(res)
+		case <-cancelContext.Done():
+			fmt.Printf("operation canceled : it took more than %v\n", timeout)
+
+		}
 	}
 	fmt.Printf("all done in %d milliseconds\n", time.Since(start).Milliseconds())
 }

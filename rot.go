@@ -10,7 +10,7 @@ import (
 )
 
 func FetchCityDataconcurrently(cityName string, ch chan<- string) {
-	sub_start := time.Now()
+	subStart := time.Now()
 
 	url := fmt.Sprintf("http://localhost:3000/cities?name=%s", cityName)
 	res, err := http.Get(url)
@@ -38,14 +38,14 @@ func FetchCityDataconcurrently(cityName string, ch chan<- string) {
 		ch <- fmt.Sprintf("%s city --> %s C°\t took %d milliseconds\n\n",
 			data[0].Name,
 			data[0].Temp,
-			time.Since(sub_start).Milliseconds())
+			time.Since(subStart).Milliseconds())
 	} else {
-		ch <- fmt.Sprintf("%s doesn't exist\t took %d milliseconds\n\n", cityName, time.Since(sub_start).Milliseconds())
+		ch <- fmt.Sprintf("%s doesn't exist\t took %d milliseconds\n\n", cityName, time.Since(subStart).Milliseconds())
 	}
 }
 
 func fetchCityDataSequentialy(cityName string) {
-	sub_start := time.Now()
+	subStart := time.Now()
 
 	url := fmt.Sprintf("http://localhost:3000/cities?name=%s", cityName)
 	res, err := http.Get(url)
@@ -71,6 +71,6 @@ func fetchCityDataSequentialy(cityName string) {
 
 	fmt.Println("-----------------")
 	fmt.Printf("%s city --> %s degree\t\t", data[0].Name, data[0].Temp)
-	fmt.Printf("%s took %d milliseconds\n", cityName, time.Since(sub_start).Milliseconds())
+	fmt.Printf("%s took %d milliseconds\n", cityName, time.Since(subStart).Milliseconds())
 	fmt.Print("-----------------\n\n")
 }
